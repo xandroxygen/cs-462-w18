@@ -1,7 +1,8 @@
 ruleset lab_1 {
   meta {
     name "Lab 1"
-    description "Events and Queries"
+    description <<
+Events and Queries >>
     author "Xander Moffatt"
     logging on
     shares hello
