@@ -23,9 +23,12 @@ Events and Queries >>
   rule hello_monkey {
     select when echo monkey
     pre{
-      name = event:attr("name").isnull() => "monkey" | event:attr("name").klog("Name passed in: ")
+      name = event:attr("name").isnull() => "monkey" | event:attr("name")
     }
     send_directive("say", {"something": "Hello " + name})
+    always{
+      name.klog("Name passed in: ")
+    }
   }
   
 }
