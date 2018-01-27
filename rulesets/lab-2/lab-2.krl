@@ -13,4 +13,12 @@ ruleset xandroxygen.lab_2 {
                     event:attr("message")
                    )
   }
+
+  rule test_get_messages {
+    select when test get_messages
+    pre {
+      messages = twilio:messages(event:attr("page_size"), event:attr("filter_to"), event:attr("filter_from"))
+    }
+    send_directive("say", messages)
+  }
 }
