@@ -29,7 +29,7 @@ ruleset xandroxygen.wovyn_base {
                       ]
                     }
                   ] }
-    temperature_threshold = 23.0
+    temperature_threshold = 20.0
     notification_number = "+13852907346"
   }
   
@@ -45,7 +45,7 @@ ruleset xandroxygen.wovyn_base {
     send_directive("heartbeat")
     fired {
       raise wovyn event "new_temperature_reading"
-        attributes attrsn
+        attributes attrs
     }
   }
   
@@ -81,7 +81,7 @@ ruleset xandroxygen.wovyn_base {
       temp = event:attr("temperature")
       threshold = event:attr("threshold")
       message = <<
-      Warning: Wovyn Temperature Violation. Temp: #{temp}, Threshold: #{threshold}"
+      Warning: Wovyn Temperature Violation. Temp: #{temp}, Threshold: #{threshold}
       >>
       attrs = {
         "to": notification_number,
