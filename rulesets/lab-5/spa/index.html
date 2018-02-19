@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>Wovyn HQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" />
+  </head>
+  <body>
+    <container>
+      <h1>Wovyn HQ</h1>
+      <a class="button" href="#">Home</a>
+      <a class="button" href="#profile">User Profile</a>
+      <router>
+        <route path="profile"><profile-page></profile-page></route>
+        <route path=""><home-page></home-page></route>
+      </router>
+    </container>
+    
+    
+
+    <script type="riot/tag" src="utils.tag"></script>
+    <script type="riot/tag" src="current-temp.tag"></script>
+    <script type="riot/tag" src="temp-list.tag"></script>
+    <script type="riot/tag" src="home-page.tag"></script>
+    <script type="riot/tag" src="profile-page.tag"></script>
+    <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/riot-route@3.1.3/dist/route+tag.js"></script>
+    <script>riot.mount('container')</script>
+  </body>
+</html>
