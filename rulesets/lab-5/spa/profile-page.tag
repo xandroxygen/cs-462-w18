@@ -16,7 +16,7 @@
         <input type="text" class="u-full-width" id="contact-number" ref="number" value="{profile.number}">
       </div>
       <div class="six columns">
-        <label for="threshold">Sensor Location</label>
+        <label for="threshold">Temperature Threshold</label>
         <input type="text" class="u-full-width" id="threshold" ref="threshold" value="{profile.threshold}">
       </div>    
     </div>

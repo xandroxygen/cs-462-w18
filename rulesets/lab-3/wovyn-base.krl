@@ -1,6 +1,7 @@
 ruleset xandroxygen.wovyn_base {
   meta {
     shares __testing
+    use module xandroxygen.sensor_profile alias profile
   }
   global {
     __testing = { "events": [ 
@@ -29,8 +30,6 @@ ruleset xandroxygen.wovyn_base {
                       ]
                     }
                   ] }
-    temperature_threshold = 20.0
-    notification_number = "+13852907346"
   }
   
   rule process_heartbeat {
@@ -55,11 +54,11 @@ ruleset xandroxygen.wovyn_base {
       temp = event:attr("temperature")
       attrs = {
         "temperature": temp,
-        "threshold": temperature_threshold,
+        "threshold": profile:threshold().as("Number"),
         "timestamp": event:attr("timestamp")
       }
     }
-    if temp > temperature_threshold then
+    if temp > profile:threshold().as("Number") then
       send_directive("violation", {"temperature": temp })
     fired {
       raise wovyn event "threshold_violation"
@@ -84,7 +83,7 @@ ruleset xandroxygen.wovyn_base {
       Warning: Wovyn Temperature Violation. Temp: #{temp}, Threshold: #{threshold}
       >>
       attrs = {
-        "to": notification_number,
+        "to": profile:number(),
         "from": from,
         "message": message
       }
