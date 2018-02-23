@@ -24,14 +24,8 @@
   </form>
 
   <script>
-  this.profile = {
-    name: "Wovyn 1",
-    location: "Lamp Table",
-    number: "+13852907346",
-    threshold: "19.0"
-  }
+  this.profile = {}
   
-
   this.submit = (e) => {
     const name = this.refs.name.value
     const location = this.refs.location.value
@@ -40,6 +34,40 @@
     this.profile = {
       name, location, number, threshold
     }
+    updateProfile(this.profile).then(() => console.log("Profile updated"))
   }
+
+  const profileUrl = "http://localhost:8080/sky/cloud/8cVyJ2vq9UMDoZVtHCqtpN/xandroxygen.sensor_profile"
+  const updateProfileUrl = "http://localhost:8080/sky/event/8cVyJ2vq9UMDoZVtHCqtpN/VpvNikjsikJiTLrYnwMttZ/sensor/profile_updated"
+
+  const updateProfile = async profile => {
+    fetch(updateProfileUrl, {
+      method: "POST",
+      body: JSON.stringify(profile),
+      headers: new Headers({
+        "Content-Type": "application/json"
+      })
+    })
+  }
+
+  const getProfileData = async () => {
+    const nameResponse = await fetch(`${profileUrl}/name`)
+    const locationResponse = await fetch(`${profileUrl}/location`)
+    const thresholdResponse = await fetch(`${profileUrl}/threshold`)
+    const numberResponse = await fetch(`${profileUrl}/number`)
+
+    const name = await nameResponse.json()
+    const location = await locationResponse.json()
+    const threshold = await thresholdResponse.json()
+    const number = await numberResponse.json()
+
+    return { name, location, threshold, number }
+  }
+
+  getProfileData().then(data => {
+    this.profile = data
+    this.update()
+  })
+
   </script>
 </profile-page>

@@ -15,14 +15,48 @@
     </container>
     
     
-
+    <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/riot-route@3.1.3/dist/route+tag.js"></script>
     <script type="riot/tag" src="utils.tag"></script>
     <script type="riot/tag" src="current-temp.tag"></script>
     <script type="riot/tag" src="temp-list.tag"></script>
     <script type="riot/tag" src="home-page.tag"></script>
     <script type="riot/tag" src="profile-page.tag"></script>
-    <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/riot-route@3.1.3/dist/route+tag.js"></script>
-    <script>riot.mount('container')</script>
+    <script>
+      const baseURL = "http://localhost:8080/sky/cloud/8cVyJ2vq9UMDoZVtHCqtpN/xandroxygen.temperature_store"
+  
+      const getData = async () => {
+        const temperaturesResponse = await fetch(`${baseURL}/temperatures`)
+        const temperatures = await temperaturesResponse.json()
+        const currentTemp = temperatures[temperatures.length - 1].temperature
+  
+        const violationsResponse = await fetch(`${baseURL}/threshold_violations`)
+        const violations = await violationsResponse.json()
+  
+        return { currentTemp, temperatures, violations }
+  
+      }
+  
+      function Store() {
+        riot.observable(this)
+        this.currentTemp = 0.0
+        this.temperatures = []
+        this.violations = []
+      }
+  
+      const store = new Store()
+      riot.mixin({ store })
+      riot.mount('container', { store })
+      
+  
+      getData().then((data) => {
+        const { currentTemp, temperatures, violations } = data
+        store.currentTemp = currentTemp
+        store.temperatures = temperatures
+        store.violations = violations
+        store.trigger("load")
+      })
+      
+    </script>
   </body>
 </html>

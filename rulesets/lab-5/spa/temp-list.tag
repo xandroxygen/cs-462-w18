@@ -13,14 +13,10 @@
 
   <script>
     this.title = opts.title || "Temperature List"
-    this.temps = [
-    {
-      temperature: "19.0",
-      timestamp: "10:00"
-    },
-    {
-      temperature: "19.1",
-      timestamp: "10:01"
-    }]
+    this.temps = store[opts.key]
+    this.store.on('load', () => {
+      this.temps = store[opts.key]
+      this.update()
+    })
   </script>
 </temp-list>
