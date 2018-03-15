@@ -1,3 +1,6 @@
 screencasts
 *-key.krl
 .DS_Store
+__pycache__
+.pytest_cache
+.vscode
