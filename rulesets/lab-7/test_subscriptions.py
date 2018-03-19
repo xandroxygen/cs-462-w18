@@ -42,6 +42,18 @@ def delete_subscriptions():
     return r.content
 
 
+def delete_existing_subscription(child_eci, root_eci, child_name):
+    # delete subscription
+    url = picos.event_url(child_eci, "delete", "wrangler",
+                          "subscription_cancelled")
+    ok, r = picos.post(url)
+
+    # delete extra sensor pico
+    url = picos.event_url(root_eci, "delete", "wrangler", "child_deletion")
+    ok, r = picos.post(url, data={"name": child_name})
+    assert ok == True
+
+
 def get(function_name):
     url = picos.api_url(manager_eci, manager_pico_id, function_name)
     ok, r = picos.get(url)
@@ -142,15 +154,7 @@ def test_subscribe_with_existing_sensor():
     sleep(2)
     assert len(subscriptions()) > 0
 
-    # delete subscription
-    url = picos.event_url(child_eci, "delete", "wrangler",
-                          "subscription_cancelled")
-    ok, r = picos.post(url)
-
-    # delete extra sensor pico
-    url = picos.event_url(root_eci, "delete", "wrangler", "child_deletion")
-    ok, r = picos.post(url, data={"name": child_name})
-    assert ok == True
+    #delete_existing_subscription(child_eci, root_eci, child_name)
 
 
 def test_multiple_sensors():
@@ -163,6 +167,7 @@ def test_multiple_sensors():
         assert ok == True
 
     sleep(2)
+    print(temperatures())
     assert len(temperatures()) == N
 
 
