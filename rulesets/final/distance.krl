@@ -1,6 +1,7 @@
 ruleset final.distance {
   meta {
-    shares __testing
+    shares __testing, get_distance, is_dest_in_radius
+    provides get_distance, is_dest_in_radius
     use module final.dm_keys
     use module final.distance_matrix alias distance
       with api_key = keys:distance_matrix{"api_key"}
@@ -19,17 +20,14 @@ ruleset final.distance {
                       "attrs": ["city"]
                     }
                   ] }
-  }
-  
-  rule get_distance {
-    select when distance get
-    pre {
-      dist = distance:distance(event:attr("origin"), event:attr("dest"))
-    }
-    send_directive("distance", {"distance":dist})
-    always {
-      raise distance event "got"
-        attributes { "distance": dist }
-    }
+                  
+      get_distance = function(origin, dest) {
+        distance:distance(origin, dest)
+      }
+      
+      is_dest_in_radius = function(origin, dest, radius) {
+        distance = distance:distance(origin, dest);
+        distance.as("Number") < radius.as("Number")
+      }
   }
 }

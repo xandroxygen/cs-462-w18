@@ -29,6 +29,13 @@ ruleset final.distance_matrix {
     }
   }
   
+  rule intialization {
+    select when wrangler ruleset_added where rids >< meta:rid
+    always {
+      raise distance event "city" attributes { "city": "Provo" }
+    }
+  }
+  
   rule set_city {
     select when distance city
     always {
